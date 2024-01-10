@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
+typedef struct Data {
 	char* type;
 	void* data;
 } Data;
@@ -15,3 +15,5 @@ typedef struct Node {
 void addToList(Node** list, Data data);
 
 void printListInt(Node* list);
+
+void printListString(Node* list);

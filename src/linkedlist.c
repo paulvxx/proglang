@@ -30,3 +30,18 @@ void printListInt(Node* list) {
 		index++;
 	}
 }
+
+void printListString(Node* list) {
+	Node* n = list;
+	int index = 0;
+	while (n != NULL) {
+		if (strcmp(n->data.type, "string") == 0) {
+			printf("\"%s\" -> ", (char*) n->data.data);
+		}
+		else {
+			printf("Error: Node data at index %d is not of type char*\n", index);
+		}
+		n = n->next;
+		index++;
+	}
+}
