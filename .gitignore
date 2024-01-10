@@ -1,2 +1,6 @@
 *.vsidx
 /.vs
+MyProgLangProj.sln
+MyProgLangProj.vcxproj
+MyProgLangProj.vcxproj.filters
+MyProgLangProj.vcxproj.user
