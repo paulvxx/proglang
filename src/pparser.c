@@ -165,7 +165,7 @@ void* parseNumber(char* str, int* pos, int* res, float* resf, int* n) {
 int eat(char* str, int* pos, char* s) {
     if (*pos >= strlen(str)) return FALSE;
     int i = 0;
-    while (i < strlen(s)) {
+    while (*pos >= strlen(str) && i < strlen(s)) {
 		if (!eatChar(str, pos, s[i])) return FALSE;
 		i++;
 	}
