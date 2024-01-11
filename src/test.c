@@ -81,9 +81,8 @@ int main1(int argc, char argv[]) {
 
 int main(int argc, char argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	//char* str = parseFile("test.txt");
-	//printf("%s\n", str);
-	printf("%d\n", 4);
-	//free(str);
+	char* str = parseFile("test.txt");
+	printf("%s\n", str);
+	free(str);
 	return 0;
 }
