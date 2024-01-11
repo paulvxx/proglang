@@ -1,0 +1,1 @@
+string with a lot of cotnent in it. I want to split it into two strings, one with the first 1000 characters and the other with the rest of the string. How can I do this?
