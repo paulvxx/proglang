@@ -81,8 +81,30 @@ int main1(int argc, char argv[]) {
 
 int main(int argc, char argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	char* str = parseFile("test.txt");
-	printf("%s\n", str);
+	//char* str = parseFile("test.txt");
+
+	char * str = malloc(sizeof(char) * 1024);
+	strcpy(str, "variable%%%%");
+	int p = 0;
+	parseVariable(str, &p);
+	char *st = substr(str, 0, p);
+	printf("%s\n", st);
+
+	strcpy(str, "12345%%%%");
+	p = 0;
+	int res = 0;
+	float resf = 0.0;
+	parseNumber(str, &p, &res, &resf, 0);
+	printf("%d\n", res);
+
+	free(st);
 	free(str);
+
+	char* pstr = parseFile("test.txt");
+	int pos = 0;
+	int d = parseProgram(pstr, &pos, 0);
+	printf("%d\n", d);
+
+	free(pstr);
 	return 0;
 }
