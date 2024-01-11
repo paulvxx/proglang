@@ -25,6 +25,23 @@ void addToList(Node** list, Data data) {
 	}
 }
 
+void removeFromList(Node** list) {
+	if (*list == NULL) return;
+	if ((*list)->next == NULL) {
+		free(*list);
+		*list = NULL;
+		return;
+	}
+	else {
+		Node* n = *list;
+		while (n->next->next != NULL) {
+			n = n->next;
+		}
+		free(n->next);
+		n->next = NULL;
+	}
+}
+
 void addToListIndex(Node** list, int index, Data data) {
 	if (index == size(*list)) addToList(list, data);
 	else if (index == 0) {
@@ -43,6 +60,25 @@ void addToListIndex(Node** list, int index, Data data) {
 		newNode->data = data;
 		newNode->next = n->next;
 		n->next = newNode;
+	}
+}
+
+void removeFromListIndex(Node** list, int index) {
+	if (index == size(*list) - 1) removeFromList(list);
+	else if (index == 0) {
+		Node* n = *list;
+		*list = (*list)->next;
+		free(n);
+	} else {
+		Node* n = *list;
+		int i = 0;
+		while (i < (index - 1)) {
+			n = n->next;
+			i++;
+		}
+		Node* toRemove = n->next;
+		n->next = n->next->next;
+		free(toRemove);
 	}
 }
 
@@ -87,3 +123,13 @@ int size(Node* list) {
 	return size;
 }
 
+Data* get(Node* list, int index) {
+	if (size(list) <= index || index < 0) return NULL;
+	Node* n = list;
+	int i = 0;
+	while (i < index) {
+		n = n->next;
+		i++;
+	}
+	return &(n->data);
+}
