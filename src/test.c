@@ -34,13 +34,23 @@ int main(int argc, char argv[]) {
 	char* t = "David";
 	d4->type = "string";
 	d4->data = t;
+	Data* d5 = malloc(sizeof(Data));
+	char* u = "Asburn";
+	d5->type = "string";
+	d5->data = u;
+	printf("\n");
 
 	addToList(&n2, *d3);
 	addToList(&n2, *d4);
+	// this should have the same effect as addToList but does not 
+	//addToList(&n2, *d5);
+	addToListIndex(&n2, 1, *d5);
+	//printf("%d\n", size(n2) - 1);
 
 	printListString(n2);
 	free(d3);
 	free(d4);
+	free(d5);
 	free(n2);
 
 	return 0;
