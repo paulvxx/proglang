@@ -1,0 +1,41 @@
+Characters in <> are Non-Terminal Symbols
+
+Characters in '' are Terminal Symbols
+
+|| denotes OR (choices)
+
+$ names are variable names e.g. $n abcd $n would match the strings (for example) eabcde, fabcdf, ggrrabcdggrr etc.
+
+<W> means whitespace characters allowed (' ', '\t', '\n')
+
+<T> means whitespace but not newlines allowed
+
+# is used for comments for this grammar
+
+-------------------------------------------------------
+
+# A function named start must be at the end of the file
+
+<Program> --> <Start_Function> || <Function> <Program>
+
+<Function> --> $function_name <W> '[' <W> <ParamList> <W> ']' <W> '->' <W> <StatementList> <W> 'end_' $function_name
+
+
+
+
+
+
+
+
+
+
+-------------------------------------------------------
+Example:
+-------------------------------------------------------
+
+start[] -> 
+!
+!
+!
+!
+end_start
