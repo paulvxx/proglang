@@ -6,9 +6,7 @@ Characters in '' are Terminal Symbols
 
 $ names are variable names e.g. $n abcd $n would match the strings (for example) eabcde, fabcdf, ggrrabcdggrr etc.
 
-<W> means whitespace characters allowed (' ', '\t', '\n')
-
-<T> means whitespace but not newlines allowed
+Whitespace is generally allowed (and assumed)
 
 # is used for comments for this grammar
 
@@ -18,24 +16,39 @@ $ names are variable names e.g. $n abcd $n would match the strings (for example)
 
 <Program> --> <Start_Function> || <Function> <Program>
 
-<Function> --> $function_name <W> '[' <W> <ParamList> <W> ']' <W> '->' <W> <StatementList> <W> 'end_' $function_name
+<Function> --> $function_name '[' <ParamList> ']' '->' <StatementList> 'end_' $function_name
+
+<ParamList> --> <ParamList> <Parameter> || ''
+<Parameter> --> '(' <Type> ',' <VariableName> ')' 
+
+<Type> --> 'Int' | 'String' | 'Char' | 'Real' | 'Bool'
+
+# Variable Names must start with a letter, and can contain letters, numbers, and '_'
+<VariableName> --> (['A' - 'Z'] OR ['a' - 'z']) || (['A' - 'Z'] OR ['a' - 'z']) ('_' OR ['1'-'9'] OR ['A' - 'Z'] OR ['a' - 'z'])*
 
 
+<StatementList> --> <Statement> <StatementList> | ''
 
+<Statement> --> '!' <Assignment> 'e!'
 
+<Assignment> --> <VariableName> '=' <Value>
 
-
-
-
-
+<Value> --> <VariableName>  #TODO 
+<Value> --> <NumExpression> # TODO
+<Value> --> <BoolExpression> #TODO
+<Value> --> <StrExpression> #TODO
 
 -------------------------------------------------------
 Example:
 -------------------------------------------------------
 
 start[] -> 
-!
-!
-!
-!
+! x = 7 !
+! y = "Hello World" !
+! if (x == 7) function() ! 
+! z = 8 + 9 !
 end_start
+
+function[] -> 
+! print("Good day\n") !
+end_function
