@@ -6,4 +6,3 @@
 char* parseFile(char* filename);
 
 // parses a string and returns a linked list of tokens
-gerg
