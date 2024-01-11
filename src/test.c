@@ -3,9 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include "linkedlist.h"
+#include "parser.h"
 #include <crtdbg.h>
 
-int main(int argc, char argv[]) {
+int main1(int argc, char argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	Node* n = NULL;
 	Data* d = malloc(sizeof(Data));
@@ -75,7 +76,14 @@ int main(int argc, char argv[]) {
 	removeFromListIndex(&n2, 0);
 	removeFromListIndex(&n2, 0);
 	//char* sl = malloc(sizeof(char) * 12);
+	return 0;
+}
 
-	
+int main(int argc, char argv[]) {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	//char* str = parseFile("test.txt");
+	//printf("%s\n", str);
+	printf("%d\n", 4);
+	//free(str);
 	return 0;
 }
