@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "error.h"
 
 // parses a file and returns a string containing the contents of the file
 char* parseFile(char* filename);

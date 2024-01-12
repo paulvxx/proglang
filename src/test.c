@@ -83,14 +83,15 @@ int main(int argc, char argv[]) {
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//char* str = parseFile("test.txt");
 
-	char * str = malloc(sizeof(char) * 1024);
-	strcpy(str, "variable%%%%");
+	//char * str = malloc(sizeof(char) * 1024);
+	char* str = strdup("variable%%%%");
 	int p = 0;
 	parseVariable(str, &p);
 	char *st = substr(str, 0, p);
 	printf("%s\n", st);
+	free(str);
 
-	strcpy(str, "12345%%%%");
+	str = strdup("12345%%%%");
 	p = 0;
 	int res = 0;
 	float resf = 0.0;

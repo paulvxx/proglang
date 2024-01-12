@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pparser.h"
+#include "error.h"
+
+static int lineno = 1;
 
 char* parseFile(char* filename) {
     FILE* fp;
@@ -91,7 +94,7 @@ void parseWhiteSpace(char* str, int* pos, int n) {
     // newlines allowed
     if (n) {
         while ( ((*pos) < strlen(str)) && str[*pos] == ' ' || str[*pos] == '\t' || str[*pos] == '\n') {
-            if (str[*pos] == '\n') n++;
+            if (str[*pos] == '\n') lineno++;
             (*pos)++;
         }
      // no newlines allowed
