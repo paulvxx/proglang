@@ -1,5 +1,6 @@
 *.vsidx
 /.vs
+/x64
 MyProgLangProj.sln
 MyProgLangProj.vcxproj
 MyProgLangProj.vcxproj.filters
