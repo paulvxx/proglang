@@ -72,18 +72,3 @@ Print Statement: 'print(' <Value> ')'
 <Value> --> <BoolExpr> #TODO
 
 <Value> --> <StrExpression> #TODO
-
--------------------------------------------------------
-Example:
--------------------------------------------------------
-
-start[] -> 
-! x = 7 !
-! y = "Hello World" !
-! if (x == 7) function() ! 
-! z = 8 + 9 !
-end_start
-
-function[] -> 
-! print("Good day\n") !
-end_function
