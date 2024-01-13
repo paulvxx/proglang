@@ -1,6 +1,6 @@
 
-start [] -> end_start
-
-start2 [] -> end_start2
-
-start3 [] -> end_start3
+start [p, @b, @c] -> end_start
+key   [p, @b, @c, a] -> end_key
+k   [@e] -> end_k
+fts  [] ->   end_fts
+example  [] -> end_example

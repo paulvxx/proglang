@@ -2,7 +2,7 @@ Characters in <> are Non-Terminal Symbols
 
 Characters in '' are Terminal Symbols
 
-|| denotes OR (choices)
+| denotes OR (choices)
 
 $ names are variable names e.g. $n abcd $n would match the strings (for example) eabcde, fabcdf, ggrrabcdggrr etc.
 
@@ -32,9 +32,10 @@ Use of # explicitly denotes no whitespace allowed
 
 <Real> --> <Integer> '.' (['0'-'9'])*
 
-<String> --> '\"' (<Chars>)* '\"'
+<String> --> '\"' <Chars>* '\"'
 <Chars> --> <Any Character> / {'\'', '\"', '\\'}  |  <Escape>
 <Escape> --> '\a' | '\b' | '\f' | '\n' | '\r' | '\t' | '\v' | '\?' | '\\' | '\'' | '\"'
+<Character> --> '\'' <Chars> '\''
 
 <Boolean> --> 'true' | 'false'
 
@@ -53,22 +54,89 @@ Use of # explicitly denotes no whitespace allowed
 <ArgVal> --> <Value> | <FunctionCall>
 
 
-## Predefined (no need to implement):
+## Predefined (no need to implement in parser, they are recognized as functions)
 Conditional Statement: 'if(' <BoolExpr> ',' <FunctionCall> ')' 
 Conditional Statement: 'if_else(' <BoolExpr> ',' <FunctionCall> ',' <FunctionCall>  ')'
 
+# prints a value to the console
 Print Statement: 'print(' <Value> ')'
+
+# returns the ASCII value of a character at a given index in a string
+Character at a String:  'char_at(' <String> ',' <NumExpression> ')'
+
+# returns the length of a string
+Length of a String: 'len(' <String> ')'
+
+# returns a substring of a string, starting at the first index, and ending at the second index
+Substring: 'substr(' <String> ',' <NumExpression> ',' <NumExpression> ')'
+
+# converts the given value to a string
+String Format for data: 'string(' <Value> ')'
+
+# rounds a NumExpression to the nearest integer
+Round: 'round(' <NumExpression> ')'
+
+# initializes an array list with a number of parameters (0 is empty)
+Array Initializer: 'list(' <NumExpression> ')'
+
+# get the size of an array list
+Array Size: 'sizel(' <ArrayList> ')'
+
+# get the value at the specified index of the array
+Get from Array: 'getv(' <ArrayList> ',' <NumExpression> ')'
+
+# adds a specified element to the array at the given index (index may be 0 to the size of the array)
+Add to Array: 'add(' <ArrayList> ',' <NumExpression> ',' <Value> ')'
+
+# removes a specified element from the array at the given index (index must be from 0 to size-1)
+Remove from Array: 'remove(' <ArrayList> ',' <NumExpression> ')'
+
+# checks if the specified element is in the array, return the index if it is, -1 if it is not
+Check if in Array: 'contains(' <ArrayList> ',' <Value> ')'
+
+# removes the first occurrence of the specified element from the array, returns the index of the removed element, -1 if it is not in the array
+Remove from Array: 'remove_first(' <ArrayList> ',' <Value> ')'
+
 ##
 
 
 <Statement> --> <Function>
 
 <Assignment> --> <VariableName> '=' <Value>
+<Assignment> --> <VariableName> '+=' <StringExpression>
+<Assignment> --> <VariableName> '+=' <NumExpression>
 
-<Value> --> <VariableName>
+<Assignment> --> <VariableName> '-=' <NumExpression>
+<Assignment> --> <VariableName> '*=' <NumExpression>
+<Assignment> --> <VariableName> '/=' <NumExpression>
 
-<Value> --> <NumExpression> # TODO
 
-<Value> --> <BoolExpr> #TODO
+<Value> --> <VariableName> | <NumExpression> | <BoolExpr> | <StrExpression> | <ArrayList>
 
-<Value> --> <StrExpression> #TODO
+
+<NumExpression> --> <AddTerm> | <AddTerm> <AddOp> <NumExpression>
+<AddOp> --> '+' | '-'
+<AddTerm> --> <MultTerm> | <MultTerm> <MultOp> <AddTerm>
+<MultOp> --> '*' | '/'
+<MultTerm> --> '-' <MultTerm> | <NumValue> | '(' <NumExpression> ')'
+<NumValue> --> <Real> | <Integer> | <FunctionCall> | <VariableName>
+
+<BoolExpr> --> <OrTerm> | <OrTerm> 'OR' <BoolExpr>
+<OrTerm> --> <AndTerm> | <AndTerm> 'AND' <OrTerm>
+<AndTerm> --> 'NOT' <AndTerm> | <BoolValue> | '(' <BoolExpr> ')'
+<BoolValue> --> <Relation> | <FunctionCall> | <VariableName> | <Boolean>
+
+<Relation> --> <NumExpression> <RelOp> <NumExpression>
+<Relation> --> <Character> <RelOp> <Character>
+<Relation> --> <String> '==' <String>
+<Relop> --> '==' | '<' | '>' | '<=' | '>='
+
+<StringExpression> --> <StrValue> | <StrValue> '+' <StringExpression>
+<StrValue> --> <String> | <FunctionCall> | <Character> | <VariableName>
+
+<ArrayList> --> '[[' <ListValues> ']]'
+<ListValues> --> <Value> ',' <ListValues> | <Value>
+
+
+### KEYWORDS (CANNOT BE USED AS VARIABLE NAMES) ###
+'true', 'false', 'if', 'if_else', 'print', 'char_at', 'len', 'substr', 'getv', 'string', 'round', 'list', 'sizel', 'add', 'remove', 'contains', 'remove_first', 'end_', 'OR', 'AND', 'NOT'
