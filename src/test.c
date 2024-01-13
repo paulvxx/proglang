@@ -95,15 +95,16 @@ int main(int argc, char argv[]) {
 	p = 0;
 	int res = 0;
 	float resf = 0.0;
-	parseNumber(str, &p, &res, &resf, 0);
+	parseNumber(str, &p, &res, &resf);
 	printf("%d\n", res);
 
 	free(st);
 	free(str);
 
 	char* pstr = parseFile("test.txt");
+	printf("%s\n", pstr);
 	int pos = 0;
-	int d = parseProgram(pstr, &pos, 0);
+	int d = parseProgram(pstr, &pos);
 	printf("%d\n", d);
 
 	free(pstr);
