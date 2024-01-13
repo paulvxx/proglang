@@ -12,30 +12,65 @@ Whitespace is generally allowed (and assumed)
 
 -------------------------------------------------------
 
-# A function named start must be at the end of the file
+Use of # explicitly denotes no whitespace allowed
 
-<Program> --> <Start_Function> || <Function> <Program>
 
-<Function> --> $function_name '[' <ParamList> ']' '->' <StatementList> 'end_' $function_name
+<Program> --> <Function> | <Function> <Program>
 
-<ParamList> --> <ParamList> <Parameter> || ''
-<Parameter> --> '(' <Type> ',' <VariableName> ')' 
+<Function> --> $function_name=<VariableName> '[' <ParamSpec> ']' '->' <StatementList> 'end_' $function_name
 
-<Type> --> 'Int' | 'String' | 'Char' | 'Real' | 'Bool'
+<ParamSpec> --> <ParamList> | ''
+
+<ParamList> --> <ParamName> ',' <ParamList> || <ParamName>
+
+<ParamName> --> <VariableName> | '@' <VariableName>
 
 # Variable Names must start with a letter, and can contain letters, numbers, and '_'
-<VariableName> --> (['A' - 'Z'] OR ['a' - 'z']) || (['A' - 'Z'] OR ['a' - 'z']) ('_' OR ['1'-'9'] OR ['A' - 'Z'] OR ['a' - 'z'])*
+<VariableName> --> (['A' - 'Z'] OR ['a' - 'z']) || (['A' - 'Z'] OR ['a' - 'z']) ('_' OR ['1'-'9'] OR ['A' - 'Z'] OR ['a' - 'z'])*  [Cannot be a keyword]
 
+<Integer> --> '0' | (['1'-'9']) (['0'-'9'])*
+
+<Real> --> <Integer> '.' (['0'-'9'])*
+
+<String> --> '\"' (<Chars>)* '\"'
+<Chars> --> <Any Character> / {'\'', '\"', '\\'}  |  <Escape>
+<Escape> --> '\a' | '\b' | '\f' | '\n' | '\r' | '\t' | '\v' | '\?' | '\\' | '\'' | '\"'
+
+<Boolean> --> 'true' | 'false'
 
 <StatementList> --> <Statement> <StatementList> | ''
 
-<Statement> --> '!' <Assignment> 'e!'
+<Statement> --> '!' <Assignment> '!'
+<Statement> --> '!' <FunctionCall> '!'
+<Statement> --> '!' <Loop> '!'
+<Statement> --> <Function>
+
+<FunctionCall> --> <VariableName>#'(' <Args> ')'
+<FunctionCall> --> <VariableName>#'('  ')'
+
+<Args> --> <ArgVal> ',' <Args> | <Args>
+
+<ArgVal> --> <Value> | <FunctionCall>
+
+
+## Predefined (no need to implement):
+Conditional Statement: 'if(' <BoolExpr> ',' <FunctionCall> ')' 
+Conditional Statement: 'if_else(' <BoolExpr> ',' <FunctionCall> ',' <FunctionCall>  ')'
+
+Print Statement: 'print(' <Value> ')'
+##
+
+
+<Statement> --> <Function>
 
 <Assignment> --> <VariableName> '=' <Value>
 
-<Value> --> <VariableName>  #TODO 
+<Value> --> <VariableName>
+
 <Value> --> <NumExpression> # TODO
-<Value> --> <BoolExpression> #TODO
+
+<Value> --> <BoolExpr> #TODO
+
 <Value> --> <StrExpression> #TODO
 
 -------------------------------------------------------
