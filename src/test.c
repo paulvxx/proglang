@@ -1,4 +1,6 @@
 #define _CRTDBG_MAP_ALLOC
+#define TRUE 1
+#define FALSE 0
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -86,16 +88,18 @@ int main(int argc, char argv[]) {
 	//char * str = malloc(sizeof(char) * 1024);
 	char* str = strdup("variable%%%%");
 	int p = 0;
-	parseVariable(str, &p);
+	int c = 0;
+	parseVariable(str, &c, &p);
 	char *st = substr(str, 0, p);
 	printf("%s\n", st);
 	free(str);
 
 	str = strdup("12345%%%%");
 	p = 0;
+	c = 0;
 	int res = 0;
 	float resf = 0.0;
-	parseNumber(str, &p, &res, &resf);
+	parseNumber(str, &c, &p, &res, &resf);
 	printf("%d\n", res);
 
 	free(st);
@@ -104,7 +108,10 @@ int main(int argc, char argv[]) {
 	char* pstr = parseFile("test.txt");
 	printf("%s\n", pstr);
 	int pos = 0;
-	int d = parseProgram(pstr, &pos);
+	int line = 1;
+	int col = 0;
+	int error = TRUE;
+	int d = parseProgram(pstr, &line, &col, &pos, &error);
 	printf("%d\n", d);
 
 	free(pstr);

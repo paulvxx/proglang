@@ -1,8 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdarg.h>
 
-void generateError(char* file, size_t line, size_t pos, char* message) {
-	fprintf(stderr, "File: %s, Line=%zd, pos=%zd: %s\n", file, line, pos, message);
-	exit(1);
-}
-
+#define ERROR(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__);
