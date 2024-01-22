@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef LINKED_LIST_H
+#define LINKED_LIST_H
+
 // structure for Data element
 typedef struct Data {
 	char* type;
@@ -44,3 +47,5 @@ int size(Node* list);
 // returns the Data element at the specified index
 // or NULL if index is out of bounds
 Data* get(Node* list, int index);
+
+#endif
