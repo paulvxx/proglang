@@ -6,6 +6,7 @@
 #include <string.h>
 #include "linkedlist.h"
 #include "pparser.h"
+#include "programmanager.h"
 #include <crtdbg.h>
 
 int main1(int argc, char argv[]) {
@@ -111,8 +112,43 @@ int main(int argc, char argv[]) {
 	int line = 1;
 	int col = 0;
 	int error = TRUE;
-	int d = parseProgram(pstr, &line, &col, &pos, &error);
-	printf("%d\n", d);
+	Node* program = NULL;
+	if(parseProgram(pstr, &line, &col, &pos, &error, &program)) printf("True\n");
+	else printf("False\n");
+
+	PrintProgram(program);
+	
+
+	char* fparams[] = { "abc", "@ffd" };
+	char* fname = "my_function";
+
+	char* fparams2[] = { "b", "red", "g", "h", "code"};
+	char* fname2 = "sample_f";
+
+	char* fparams3[] = { "d", "ch", "o", "l", "ms", "uv", "ct" };
+	char* fname3 = "example";
+
+
+
+	Node* f = createNewFunction(fname, 2, fparams);
+	Node* f2 = createNewFunction(fname2, 5, fparams2);
+	Node* f3 = createNewFunction(fname3, 7, fparams3);
+	//PrintFunction(f);
+	//PrintFunction(f2);
+
+	Node* pg = NULL;
+
+	// Add functions to the program
+	addFunctionToProg(&pg, f);
+	addFunctionToProg(&pg, f2);
+	addFunctionToProg(&pg, f3);
+
+	// Print the program
+	//PrintProgram(pg);
+
+	// Free the program
+	DeleteProgram(pg);
+	DeleteProgram(program);
 
 	free(pstr);
 	return 0;

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "linkedlist.h"
+#include "stringutils.h"
 
 #ifndef P_PARSER_H
 #define P_PARSER_H
@@ -12,20 +14,20 @@ int throwError(char* msg, int* line, int* col, int* errorFlag);
 
 // parse a program:
 // <Program> -- > <Function> || <Function> <Program>
-int parseProgram(char* str, int* line, int *col, int* pos, int *err);
+int parseProgram(char* str, int* line, int *col, int* pos, int *err, Node** program);
 
 // parse a function:
 //<Function > -- > $function_name '[' <ParamList> ']' '->' <StatementList> 'end_' $function_name
-int parseFunction(char* str, int* line, int* col, int* pos, int *err);
+int parseFunction(char* str, int* line, int* col, int* pos, int *err, Node** program);
 
 // parse a parameter list:
 //end = 1 if end ']' should be parsed
 //end = 0 if end ']' should not be parsed
-int parseParamList(char* str, int* line, int* col, int* pos, int *err, int end);
+int parseParamList(char* str, int* line, int* col, int* pos, int *err, int end, Node** program, char*** paramList, int* params);
 
 // parse a parameter list:
 //TODO LATER
-int parseStatementList(char* str, int* line, int* col, int* pos, int *err);
+int parseStatementList(char* str, int* line, int* col, int* pos, int *err, Node** program);
 
 // parses white space
 // str is the current string to scan
@@ -66,8 +68,5 @@ int eat(char* str, int* col, int* pos, char* s);
 // pos is the position in the string (may be updated)
 // c is the character to be matched
 int eatChar(char* str, int* col, int* pos, char c);
-
-// forms a substring from a string with the given lower and upper indices
-char* substr(char* str, int lower, int upper);
 
 #endif

@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "pparser.h"
+#include "programmanager.h"
 #include "error.h"
-
 
 
 char* parseFile(char* filename) {
@@ -48,6 +48,7 @@ char* parseFile(char* filename) {
 int throwError(char* msg, int *line, int *col, int* errorFlag) {
     if (*errorFlag) {
         ERROR("%s, line=%d, col=%d\n", msg, *line, *col);
+        exit(-1);
         // Set the error flag to false to stop printing errors
         *errorFlag = FALSE;
     }
@@ -57,19 +58,19 @@ int throwError(char* msg, int *line, int *col, int* errorFlag) {
 
 // parse a program:
 //<Program> -- > <Function> || <Function> <Program>
-int parseProgram(char* str, int* line, int* col, int* pos, int* err) {
+int parseProgram(char* str, int* line, int* col, int* pos, int* err, Node** program) {
     parseWhiteSpace(str, line, col, pos, 1);
-    if (!parseFunction(str, line, col, pos, err)) return FALSE; //generateError("idk", lineno, *pos, "Function name required."); // return FALSE;
+    if (!parseFunction(str, line, col, pos, err, program)) return FALSE; //generateError("idk", lineno, *pos, "Function name required."); // return FALSE;
     parseWhiteSpace(str, line, col, pos, 1);
     if (strlen(str) != *pos) {
-        if (!parseProgram(str, line, col, pos, err)) return FALSE;
+        if (!parseProgram(str, line, col, pos, err, program)) return FALSE;
     }
     return TRUE;
 }
 
 // parse a function:
 // <Function> -- > $function_name '[' <ParamList> ']' '->' <StatementList> 'end_' $function_name
-int parseFunction(char* str, int* line, int* col, int* pos, int *err) {
+int parseFunction(char* str, int* line, int* col, int* pos, int *err, Node** program) {
     int oldpos = *pos;
     parseVariable(str, col, pos);
     if (oldpos == *pos) return throwError("Syntax Error: Expected function name", line, col, err);
@@ -78,21 +79,34 @@ int parseFunction(char* str, int* line, int* col, int* pos, int *err) {
     parseWhiteSpace(str, line, col, pos, 1);
     if (!eatChar(str, col, pos, '[')) return throwError("Syntax Error: Expected '['", line, col, err);
     parseWhiteSpace(str, line, col, pos, 1);
-    if (!parseParamList(str, line, col, pos, err, TRUE)) return FALSE;
+    int pcount = 0;
+    char** params = NULL;
+    if (!parseParamList(str, line, col, pos, err, TRUE, program, &params, &pcount)) return FALSE;
+    /////////////////////////////////////////
+    Node* func = createNewFunction(varname, pcount, params);
+    // free the parameter list
+    for (int i = 0; i < pcount; i++) {
+		free(params[i]);
+	}
+	free(params);
+    /////////////////////////////////////////
     if (!eatChar(str, col, pos, ']')) return throwError("Syntax Error: Expected ']'", line, col, err);
     parseWhiteSpace(str, line, col, pos, 0);
     if (!eat(str, col, pos, "->")) return throwError("Syntax Error: Expected '->'", line, col, err);
     parseWhiteSpace(str, line, col, pos, 1);
-	if (!parseStatementList(str, line, col, pos, err)) return FALSE;
+	if (!parseStatementList(str, line, col, pos, err, program)) return FALSE;
     parseWhiteSpace(str, line, col, pos, 0);
     if (!eat(str, col, pos, "end_")) return throwError("Syntax Error: Expected 'end_'", line, col, err);
     if (!eat(str, col, pos, varname)) return throwError("Syntax Error: Expected function name", line, col, err);
     free(varname);
+    // add the function to the program
+    addFunctionToProg(program, func);
+    //
     return TRUE;
 }
 
 // parse a parameter list:
-int parseParamList(char* str, int* line, int* col, int* pos, int* err, int end) {
+int parseParamList(char* str, int* line, int* col, int* pos, int* err, int end, Node** program, char*** paramList, int* params) {
     parseWhiteSpace(str, line, col, pos, 1);
     if (end && peek(str, pos, ']')) return TRUE;
     // parse the list of parameters
@@ -100,17 +114,27 @@ int parseParamList(char* str, int* line, int* col, int* pos, int* err, int end) 
     else if (peek(str, pos, '@')) {
 		(*pos)++;
 	}
+    int oldPos = *pos;
     if (!parseVariable(str, col, pos)) return FALSE;
+    /////////////////////////////////////////
+    // get the substring of the parameter name
+    char* p = substr(str, oldPos, *pos);
+    (*params)++;
+    // realloc the paramList array dynamically
+    *paramList = realloc(*paramList, sizeof(char*) * (*params + 1));
+    (*paramList)[(*params) - 1] = p;
+    /////////////////////////////////////////
+
     parseWhiteSpace(str, line, col, pos, 1);
     if (peek(str, pos, ',')) {
 		eatChar(str, col, pos, ',');
-		if (!parseParamList(str, line, col, pos, err, FALSE)) return FALSE;
+		if (!parseParamList(str, line, col, pos, err, FALSE, program, paramList, params)) return FALSE;
 	}
 	return TRUE;
 }
 
 // TODO LATER
-int parseStatementList(char* str, int* line, int* col, int* pos, int* err) {
+int parseStatementList(char* str, int* line, int* col, int* pos, int* err, Node** program) {
     return TRUE;
 }
 
@@ -222,27 +246,4 @@ int eatChar(char* str, int* col, int* pos, char c) {
 	(*pos)++;
     (*col)++;
 	return TRUE;
-}
-
-char* substr(char* str, int lower, int upper) {
-    if (lower < 0 || upper > strlen(str) || 
-        lower > strlen(str) || upper < 0) {
-		return NULL;
-	}
-    // allocate memory for the substring
-	char* result = malloc(sizeof(char) * (upper - lower + 1));
-    // improper bounds
-	if (result == NULL) {
-		perror("malloc failed");
-		exit(EXIT_FAILURE);
-	}
-    // form the substring
-	int i = 0;
-	while (lower < upper) {
-		result[i] = str[lower];
-		i++;
-		lower++;
-	}
-	result[i] = '\0';
-	return result;
 }

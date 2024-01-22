@@ -6,7 +6,7 @@
 
 void addToList(Node** list, Data data) {
 	// add first element to list
-	printf("adding member %s\n", data.type);
+	//printf("adding member %s\n", data.type);
 	if (*list == NULL) {
 		*list = malloc(sizeof(Node));
 		(*list)->data = data;
