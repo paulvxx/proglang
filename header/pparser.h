@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef P_PARSER_H
+#define P_PARSER_H
+
 // parses a file and returns a string containing the contents of the file
 char* parseFile(char* filename);
 
@@ -66,3 +69,5 @@ int eatChar(char* str, int* col, int* pos, char c);
 
 // forms a substring from a string with the given lower and upper indices
 char* substr(char* str, int lower, int upper);
+
+#endif
