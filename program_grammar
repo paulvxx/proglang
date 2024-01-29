@@ -43,8 +43,11 @@ Use of # explicitly denotes no whitespace allowed
 
 <Statement> --> '!' <Assignment> '!'
 <Statement> --> '!' <FunctionCall> '!'
-<Statement> --> '!' <Loop> '!'
+<Statement> --> '!' <Conditional> '!'
 <Statement> --> <Function>
+
+<Conditional> --> 'if' <BoolExpr> <Statement>
+<Conditional> --> 'if_else' <BoolExpr> <Statement> ',' <Statement>
 
 <FunctionCall> --> <VariableName>#'(' <Args> ')'
 <FunctionCall> --> <VariableName>#'('  ')'
@@ -55,8 +58,6 @@ Use of # explicitly denotes no whitespace allowed
 
 
 ## Predefined (no need to implement in parser, they are recognized as functions)
-Conditional Statement: 'if(' <BoolExpr> ',' <FunctionCall> ')' 
-Conditional Statement: 'if_else(' <BoolExpr> ',' <FunctionCall> ',' <FunctionCall>  ')'
 
 # prints a value to the console
 Print Statement: 'print(' <Value> ')'
